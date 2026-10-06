@@ -1,6 +1,6 @@
 import sys
 
-from . import catalog
+from . import catalog, label
 
 
 def main(argv):
@@ -11,6 +11,8 @@ def main(argv):
         for reason, n in sorted(dropped.items(), key=lambda x: -x[1]):
             print(f"  - {n:4} dropped: {reason}")
         print(f"Kept {len(kept)} contemporary rom-coms -> data/books.json")
+    elif command == "label":
+        label.serve(open_browser="--no-open" not in argv)
     else:
         raise SystemExit(f"Unknown command: {command}")
 

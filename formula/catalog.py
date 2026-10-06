@@ -9,7 +9,7 @@ import json
 from . import hardcover
 
 FIELDS = """id slug title release_year pages rating ratings_count users_count
-            description cached_tags contributions(limit: 1) { author { name } }"""
+            description cached_tags image { url } contributions(limit: 1) { author { name } }"""
 
 PULL = """query($mood: String!, $offset: Int!) {
   books(where: {cached_tags: {_contains: {Genre: [{tag: "Romance"}], Mood: [{tag: $mood}]}},
@@ -99,6 +99,7 @@ def clean(book):
         "ratings": book["ratings_count"],
         "readers": book["users_count"],
         "description": (book["description"] or "").strip(),
+        "cover": (book.get("image") or {}).get("url"),
         "genres": tags(book, "Genre"),
         "moods": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Mood", [])},
         "reader_tags": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Tag", [])},

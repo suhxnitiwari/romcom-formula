@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trope Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f7f2ea; --card: #fffdf9; --ink: #2b2024; --muted: #7b6c6f;
+    --line: #e6dccf; --accent: #8c3b4a; --accent-soft: #f3e4e2; --done: #4f6b58;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1618; --card: #241e20; --ink: #f1e9e3; --muted: #a8999a;
+      --line: #3a3033; --accent: #d98c98; --accent-soft: #3a272b; --done: #8fb59a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 Inter, system-ui, sans-serif; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 16px 80px; }
+  .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  h1 { font: 600 clamp(30px, 5vw, 44px)/1.1 Fraunces, Georgia, serif; margin: 8px 0 10px; }
+  .lede { color: var(--muted); max-width: 620px; margin: 0; }
+  .bar { position: sticky; top: 0; z-index: 2; background: var(--paper); padding: 18px 0 14px; margin-top: 22px;
+         border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .progress { flex: 1 1 220px; }
+  .progress b { font: 600 20px Fraunces, Georgia, serif; }
+  .track { height: 4px; background: var(--line); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+  .track i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+  input[type=search] { flex: 1 1 220px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px;
+         background: var(--card); color: var(--ink); font: inherit; }
+  .filters { display: flex; gap: 6px; }
+  .filters button, .pill { font: 500 13px Inter, sans-serif; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+         border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+  .filters button[aria-pressed=true] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .saved { font-size: 12px; color: var(--muted); min-width: 60px; text-align: right; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 22px 18px; margin-top: 26px; }
+  .book { all: unset; cursor: pointer; display: block; }
+  .book:focus-visible .cover { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .cover { position: relative; aspect-ratio: 2/3; border-radius: 6px; overflow: hidden; background: var(--line);
+         box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 18px rgba(43,32,36,.08); transition: transform .2s; }
+  .book:hover .cover { transform: translateY(-3px); }
+  .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .badge { position: absolute; left: 8px; bottom: 8px; background: var(--card); color: var(--ink); font-size: 11px;
+         font-weight: 600; padding: 3px 8px; border-radius: 999px; }
+  .badge.done { background: var(--done); color: #fff; }
+  .star { position: absolute; right: 8px; top: 8px; background: var(--accent); color: #fff; font-size: 11px;
+         padding: 2px 7px; border-radius: 999px; }
+  .t { font: 600 14px/1.3 Fraunces, Georgia, serif; margin-top: 10px; }
+  .a { font-size: 12px; color: var(--muted); }
+  .empty { color: var(--muted); padding: 40px 0; }
+
+  dialog { border: 0; padding: 0; border-radius: 14px; background: var(--card); color: var(--ink);
+         width: min(920px, calc(100vw - 32px)); max-height: calc(100vh - 32px); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+  dialog::backdrop { background: rgba(27,22,24,.55); }
+  .sheet { display: grid; grid-template-columns: 220px 1fr; gap: 28px; padding: 28px; }
+  .sheet .left img { width: 100%; border-radius: 6px; }
+  .blurb { font-size: 13px; color: var(--muted); margin-top: 14px; max-height: 280px; overflow: auto; white-space: pre-line; }
+  .sheet h2 { font: 600 26px/1.15 Fraunces, Georgia, serif; margin: 0; }
+  .by { color: var(--muted); margin: 4px 0 18px; }
+  .q { font-weight: 600; margin: 0 0 10px; }
+  .tropes { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+  .trope { text-align: left; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 10px;
+         padding: 10px 12px; cursor: pointer; font: inherit; }
+  .trope b { display: block; font-size: 14px; }
+  .trope span { display: block; font-size: 12px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+  .trope[aria-pressed=true] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .pill[aria-pressed=true] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  textarea { width: 100%; margin-top: 14px; min-height: 54px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+         background: var(--paper); color: var(--ink); font: inherit; resize: vertical; }
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 28px;
+         border-top: 1px solid var(--line); position: sticky; bottom: 0; background: var(--card); }
+  .foot .hint { font-size: 12px; color: var(--muted); }
+  .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @media (max-width: 640px) {
+    .sheet { grid-template-columns: 1fr; padding: 20px; }
+    .sheet .left { display: grid; grid-template-columns: 90px 1fr; gap: 14px; }
+    .blurb { margin-top: 0; max-height: 140px; }
+    .foot { padding: 12px 20px; } .foot .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">The Rom-Com Formula ✦ ground truth</div>
+  <h1>Tag what you've read.</h1>
+  <p class="lede">Open a book you've read and mark every trope it really uses. Your answers are what the trope detector gets graded against, so go with what happens in the book, not what the cover promises. Skip anything you haven't read.</p>
+
+  <div class="bar">
+    <div class="progress"><b id="count">0</b> tagged <span class="a">· aim for 30–40</span><div class="track"><i id="fill"></i></div></div>
+    <input type="search" id="q" placeholder="Search title or author">
+    <div class="filters" role="group" aria-label="Show">
+      <button data-f="all" aria-pressed="true">All</button>
+      <button data-f="todo" aria-pressed="false">Not yet</button>
+      <button data-f="done" aria-pressed="false">Tagged</button>
+    </div>
+    <div class="saved" id="saved"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<dialog id="dlg">
+  <div class="sheet">
+    <div class="left"><img id="dCover" alt=""><div class="blurb" id="dBlurb"></div></div>
+    <div>
+      <h2 id="dTitle"></h2>
+      <div class="by" id="dBy"></div>
+      <p class="q">Which tropes does it really use?</p>
+      <div class="tropes" id="dTropes"></div>
+      <div class="row">
+        <button class="pill" id="dNone" aria-pressed="false">None of these</button>
+        <button class="pill" id="dNot" aria-pressed="false">Not actually a rom-com</button>
+      </div>
+      <textarea id="dNote" placeholder="Anything else? (optional, e.g. &quot;fake dating starts halfway through&quot;)"></textarea>
+    </div>
+  </div>
+  <div class="foot">
+    <button class="pill" id="prev">← Previous</button>
+    <span class="hint">← → to move · Esc to close · saved as you go</span>
+    <button class="pill primary" id="next">Next →</button>
+  </div>
+</dialog>
+
+<script>
+let books = [], tropes = [], labels = {}, filter = "all", shown = [], current = null, saveTimer;
+const $ = id => document.getElementById(id);
+const isDone = l => l && (l.tropes.length || l.none || l.not_romcom);
+
+async function load() {
+  const d = await (await fetch("/data")).json();
+  tropes = d.tropes; labels = d.labels;
+  books = d.books.sort((a, b) => (b.favorite - a.favorite) || (b.readers - a.readers));
+  render();
+}
+
+function save() {
+  $("saved").textContent = "Saving…";
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      await fetch("/labels", { method: "POST", body: JSON.stringify(labels) });
+      $("saved").textContent = "Saved";
+    } catch { $("saved").textContent = "Not saved: is the server running?"; }
+  }, 300);
+}
+
+function render() {
+  const q = $("q").value.trim().toLowerCase();
+  shown = books.filter(b => {
+    if (q && !(b.title + " " + b.author).toLowerCase().includes(q)) return false;
+    if (filter === "done") return isDone(labels[b.id]);
+    if (filter === "todo") return !isDone(labels[b.id]);
+    return true;
+  });
+  const done = books.filter(b => isDone(labels[b.id])).length;
+  $("count").textContent = done;
+  $("fill").style.width = Math.min(100, done / 40 * 100) + "%";
+  $("grid").innerHTML = shown.length ? shown.map(b => {
+    const l = labels[b.id], n = l ? l.tropes.length : 0;
+    const badge = isDone(l) ? `<span class="badge done">${l.not_romcom ? "not a rom-com" : n ? n + (n > 1 ? " tropes" : " trope") : "no tropes"}</span>` : "";
+    return `<button class="book" data-id="${b.id}">
+      <div class="cover"><img loading="lazy" src="${b.cover}" alt="">${b.favorite ? '<span class="star">✦ yours</span>' : ""}${badge}</div>
+      <div class="t">${esc(b.title)}</div><div class="a">${esc(b.author)} · ${b.year}</div></button>`;
+  }).join("") : `<div class="empty">Nothing here yet.</div>`;
+}
+
+function label(id) {
+  return labels[id] || (labels[id] = { title: books.find(b => b.id == id).title, tropes: [], none: false, not_romcom: false, note: "" });
+}
+function tidy(id) { if (labels[id] && !isDone(labels[id]) && !labels[id].note) delete labels[id]; }
+
+function open(id) {
+  current = id;
+  const b = books.find(x => x.id == id), l = labels[id] || { tropes: [], none: false, not_romcom: false, note: "" };
+  $("dCover").src = b.cover; $("dTitle").textContent = b.title; $("dBy").textContent = `${b.author} · ${b.year}`;
+  $("dBlurb").textContent = b.description || "";
+  $("dTropes").innerHTML = tropes.map(t =>
+    `<button class="trope" data-k="${t.key}" aria-pressed="${l.tropes.includes(t.key)}"><b>${t.name}</b><span>${t.means}</span></button>`).join("");
+  $("dNone").setAttribute("aria-pressed", l.none); $("dNot").setAttribute("aria-pressed", l.not_romcom);
+  $("dNote").value = l.note || "";
+  if (!$("dlg").open) $("dlg").showModal();
+  $("dlg").querySelector(".sheet").scrollTop = 0;
+}
+function step(d) {
+  const i = shown.findIndex(b => b.id == current), b = shown[i + d];
+  if (b) open(b.id);
+}
+
+$("dTropes").addEventListener("click", e => {
+  const t = e.target.closest(".trope"); if (!t) return;
+  const l = label(current), k = t.dataset.k, on = !l.tropes.includes(k);
+  l.tropes = on ? [...l.tropes, k] : l.tropes.filter(x => x !== k);
+  if (on) { l.none = false; $("dNone").setAttribute("aria-pressed", false); }
+  t.setAttribute("aria-pressed", on); tidy(current); save(); render();
+});
+$("dNone").onclick = () => {
+  const l = label(current); l.none = !l.none;
+  if (l.none) { l.tropes = []; document.querySelectorAll(".trope").forEach(t => t.setAttribute("aria-pressed", false)); }
+  $("dNone").setAttribute("aria-pressed", l.none); tidy(current); save(); render();
+};
+$("dNot").onclick = () => {
+  const l = label(current); l.not_romcom = !l.not_romcom;
+  $("dNot").setAttribute("aria-pressed", l.not_romcom); tidy(current); save(); render();
+};
+$("dNote").oninput = () => { label(current).note = $("dNote").value; tidy(current); save(); };
+$("prev").onclick = () => step(-1);
+$("next").onclick = () => step(1);
+$("dlg").addEventListener("keydown", e => {
+  if (e.target.tagName === "TEXTAREA") return;
+  if (e.key === "ArrowRight") step(1);
+  if (e.key === "ArrowLeft") step(-1);
+});
+$("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
+$("grid").addEventListener("click", e => { const b = e.target.closest(".book"); if (b) open(b.dataset.id); });
+$("q").oninput = render;
+document.querySelectorAll(".filters button").forEach(btn => btn.onclick = () => {
+  filter = btn.dataset.f;
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x === btn));
+  render();
+});
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
+load();
+</script>
+</body>
+</html>
