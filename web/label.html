@@ -33,6 +33,7 @@
   input[type=search] { flex: 1 1 220px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px;
          background: var(--card); color: var(--ink); font: inherit; }
   .filters { display: flex; gap: 6px; }
+  select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); font: inherit; }
   .filters button, .pill { font: 500 13px Inter, sans-serif; padding: 8px 14px; border-radius: 999px; cursor: pointer;
          border: 1px solid var(--line); background: var(--card); color: var(--ink); }
   .filters button[aria-pressed=true] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
@@ -93,6 +94,10 @@
   <div class="bar">
     <div class="progress"><b id="count">0</b> tagged <span class="a">· aim for 30–40</span><div class="track"><i id="fill"></i></div></div>
     <input type="search" id="q" placeholder="Search title or author">
+    <select id="shelf" aria-label="Shelf">
+      <option value="">Every shelf</option><option value="romcom">Rom-com</option><option value="heartfelt">Heartfelt</option>
+      <option value="suspense">Romantic suspense</option><option value="dark">Dark romance</option>
+    </select>
     <div class="filters" role="group" aria-label="Show">
       <button data-f="all" aria-pressed="true">All</button>
       <button data-f="todo" aria-pressed="false">Not yet</button>
@@ -153,6 +158,7 @@ function render() {
   const q = $("q").value.trim().toLowerCase();
   shown = books.filter(b => {
     if (q && !(b.title + " " + b.author).toLowerCase().includes(q)) return false;
+    if ($("shelf").value && b.shelf !== $("shelf").value) return false;
     if (filter === "done") return isDone(labels[b.id]);
     if (filter === "todo") return !isDone(labels[b.id]);
     return true;
@@ -218,6 +224,7 @@ $("dlg").addEventListener("keydown", e => {
 $("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
 $("grid").addEventListener("click", e => { const b = e.target.closest(".book"); if (b) open(b.dataset.id); });
 $("q").oninput = render;
+$("shelf").onchange = render;
 document.querySelectorAll(".filters button").forEach(btn => btn.onclick = () => {
   filter = btn.dataset.f;
   document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x === btn));

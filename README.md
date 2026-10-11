@@ -1,6 +1,6 @@
 # The Rom-Com Formula ✦
 
-*Is the formula real, and does it predict what readers love?*
+*What separates a rom-com from a dark romance?*
 
 ## Ownership
 
@@ -8,7 +8,7 @@
 
 ## What it is
 
-Enemies to lovers, fake dating, one bed. Romance readers shop by trope, so I'm testing whether tropes actually explain which rom-coms readers love: a trope detector that reads book descriptions, graded against books I tagged by hand, and a model of what predicts a book's rating.
+Enemies to lovers, fake dating, one bed. Romance readers shop by trope, so I'm testing what tropes really explain: which ones mark a book as a rom-com or a dark romance, and whether they predict how much readers love it. That takes a trope detector that reads book descriptions, graded against books I tagged by hand, and a model of what predicts a book's rating.
 
 It starts from four books I love: *The Unhoneymooners*, *The Love Hypothesis*, *You Deserve Each Other* and *The Hating Game*.
 
@@ -16,7 +16,7 @@ It starts from four books I love: *The Unhoneymooners*, *The Love Hypothesis*, *
 
 ## How it's built
 
-1. **Catalog** (`formula/catalog.py`): pulls every romance on [Hardcover](https://hardcover.app) that readers called funny or lighthearted (1,049 books), then keeps only contemporary rom-coms. Fantasy, historical, young adult, dark romance and literary fiction are dropped by rule; the few that slip through are removed by hand, each with its reason in the code. 269 books remain.
+1. **Catalog** (`formula/catalog.py`): pulls every romance on [Hardcover](https://hardcover.app) from 2010 on with 50+ ratings (1,536 books) and keeps the contemporary ones. Readers tag loosely, so the rules compare vote counts: a book stays if Romance is what readers mostly call it, and a stray Fantasy or Young Adult vote can't drop it. The few that slip through are removed by hand, each with its reason in the code. 410 books remain, each on a shelf: rom-com (263), heartfelt (59), romantic suspense (25) or dark romance (63).
 2. **Codebook** (`formula/tropes.py`): fifteen tropes, each with a one-line definition an annotator can apply the same way every time.
 3. **Ground truth** (`formula/label.py`, `web/label.html`): a local page where I tag the tropes in books I've read. Those labels (`data/labels.json`) are what the detector is graded against.
 

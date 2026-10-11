@@ -1,8 +1,9 @@
-"""Build the catalog: contemporary rom-com novels from Hardcover.
+"""Build the catalog: contemporary romance novels from Hardcover, sorted onto shelves.
 
 Hardcover's "Romance" genre includes Fourth Wing and The Fault in Our Stars, so a
-book has to earn its place. Readers must call it a romance, and must call it funny
-or lighthearted. Then the rules below remove what isn't a contemporary rom-com.
+book has to earn its place: readers must call it a romance, set in our world, today.
+Each book then goes on one shelf (rom-com, heartfelt, romantic suspense or dark
+romance), so the project can ask what separates a rom-com from a dark romance.
 """
 import json
 
@@ -11,8 +12,8 @@ from . import hardcover
 FIELDS = """id slug title release_year pages rating ratings_count users_count
             description cached_tags image { url } contributions(limit: 1) { author { name } }"""
 
-PULL = """query($mood: String!, $offset: Int!) {
-  books(where: {cached_tags: {_contains: {Genre: [{tag: "Romance"}], Mood: [{tag: $mood}]}},
+PULL = """query($offset: Int!) {
+  books(where: {cached_tags: {_contains: {Genre: [{tag: "Romance"}]}},
                 release_year: {_gte: 2010}, ratings_count: {_gte: 50}},
         order_by: {users_count: desc}, limit: 250, offset: $offset) { %s }
 }""" % FIELDS
@@ -26,22 +27,38 @@ BY_TITLE = """query($title: String!) {
 # (a reader filing The Love Hypothesis under Young Adult) would have dropped them.
 FAVORITES = ["The Unhoneymooners", "The Love Hypothesis", "You Deserve Each Other", "The Hating Game"]
 
-# Another world, another century or another age group: not a contemporary rom-com.
-NOT_CONTEMPORARY = {
-    "Fantasy", "Romantasy", "Fantasy romance", "Science Fiction", "Paranormal",
-    "Paranormal Romance", "Dystopian", "Horror", "Magic", "Historical Romance",
-    "Historical Fiction", "Historical", "Mystery", "Thriller", "Middle Grade",
-    "Children's", "Juvenile Fiction", "Graphic Novels", "Comics", "Manga",
+# Readers tag loosely: Haunting Adeline gets three Fantasy votes, Twisted Love one
+# Young Adult. So a genre only counts against a book when it gets at least half as
+# many votes as Romance does.
+OTHER_WORLD = {
+    "Fantasy", "Science Fiction", "Dystopian", "Magic", "Historical Fiction", "Historical",
+    "History", "War",
+    "Romantasy", "Fantasy romance", "Paranormal", "Paranormal Romance", "Historical Romance",
+    "Graphic Novels", "Comics", "Manga", "Middle Grade", "Children's",
 }
-# Funny and tagged Romance, but literary fiction with a love story inside it.
+YOUNG_ADULT = {"Young Adult", "Teen & Young Adult", "Juvenile Fiction", "Young Adult Fiction"}
+NONFICTION = {"Nonfiction", "Non-fiction", "Self Help", "Self-help", "Psychology", "Memoir",
+              "Biography", "Poetry", "Essays", "Relationships"}
+ROMANCE = {"Romance", "Dark Romance", "Contemporary Romance"}
+# Shelf labels that say nothing about what kind of book it is.
+GENERIC = {"Fiction", "General", "Contemporary", "Literature & Fiction", "Adult", "Novel",
+           "to-read", "physical-tbr", "did-not-finish", "Audiobook", "Spanish", "English"}
+# Literary fiction with a love story inside it.
 LITERARY = {"Literary Fiction", "Literary", "Literature"}
-# Young Adult only counts if it's one of the first two genres readers chose.
-TOP_TWO_ONLY = {"Young Adult", "Teen & Young Adult"}
+
+SUSPENSE = {"Thriller", "Mystery", "Suspense", "Romantic Suspense", "Psychological Thriller", "Crime"}
+
+SHELVES = {
+    "romcom": "Rom-com",
+    "heartfelt": "Heartfelt",
+    "suspense": "Romantic suspense",
+    "dark": "Dark romance",
+}
 
 
-# Tags can't catch everything. These passed every rule and still aren't rom-coms;
+# Tags can't catch everything. These passed every rule and still aren't romance novels;
 # each one is a judgment call, so each one says why.
-NOT_ROMCOMS = {
+NOT_ROMANCE = {
     "Modern Romance": "nonfiction (Aziz Ansari on dating)",
     "Stay Sexy & Don't Get Murdered: The Definitive How-To Guide": "nonfiction (a podcast memoir)",
     "Everything I Know About Love: A Memoir": "nonfiction (memoir)",
@@ -58,6 +75,21 @@ NOT_ROMCOMS = {
     "Crazy Rich Asians": "ensemble satire of the ultra-rich",
     "Rich People Problems": "ensemble satire (Crazy Rich Asians, book 3)",
     "Nick and Charlie": "a young adult novella",
+    "You": "a psychological thriller narrated by a stalker",
+    "Serotonin": "literary fiction (Houellebecq)",
+    "Fates and Furies": "literary fiction about a marriage",
+    "Cleopatra and Frankenstein": "literary fiction about a marriage",
+    "This is How You Lose Her": "a short story collection",
+    "You Exist Too Much": "literary fiction",
+    "How to Get Filthy Rich in Rising Asia": "literary fiction",
+    "Ask Again, Yes": "a family saga",
+    "Sing You Home": "a family drama",
+    "Writers & Lovers": "literary fiction about a writer",
+    "Savages": "a crime novel",
+    "Naked Heat": "a mystery (a TV tie-in)",
+    "The Giver of Stars": "historical fiction (1930s Kentucky)",
+    "The Lady's Guide to Celestial Mechanics": "historical romance (Regency)",
+    "Love in the Afternoon": "historical romance (Victorian)",
 }
 
 
@@ -65,25 +97,44 @@ def tags(book, kind, top=5):
     return [t["tag"] for t in (book.get("cached_tags") or {}).get(kind, [])[:top]]
 
 
+def votes(book, names):
+    """The most readers who gave this book any one of these genres."""
+    genres = (book.get("cached_tags") or {}).get("Genre", [])
+    return max([t["count"] for t in genres if t["tag"] in names], default=0)
+
+
 def why_not(book):
-    """Return why a book isn't a contemporary rom-com, or None if it is."""
-    if book["title"] in NOT_ROMCOMS:
-        return "hand-checked: " + NOT_ROMCOMS[book["title"]]
-    genres = tags(book, "Genre")
-    moods = [m.lower() for m in tags(book, "Mood", top=3)]
-    if NOT_CONTEMPORARY & set(genres):
-        return "other world or era: " + ", ".join(sorted(NOT_CONTEMPORARY & set(genres)))
-    if LITERARY & set(genres):
-        return "literary fiction"
-    if TOP_TWO_ONLY & set(genres[:2]):
-        return "young adult"
-    if "Romance" not in genres[:3]:
+    """Return why a book isn't a contemporary romance, or None if it is."""
+    if book["title"] in NOT_ROMANCE:
+        return "hand-checked: " + NOT_ROMANCE[book["title"]]
+    romance = votes(book, ROMANCE)
+    top = max([t["count"] for t in book["cached_tags"].get("Genre", []) if t["tag"] not in GENERIC], default=0)
+    if romance < 1 or romance < 0.75 * top:
         return "romance isn't the point"
-    if "dark" in moods:
-        return "dark romance"
-    if not {"funny", "lighthearted"} & set(moods):
-        return "not funny or lighthearted"
+    if votes(book, OTHER_WORLD) >= romance / 2:
+        return "other world or era"
+    if votes(book, YOUNG_ADULT) >= romance / 2:
+        return "young adult"
+    if votes(book, NONFICTION) >= romance / 2:
+        return "nonfiction"
+    if LITERARY & set(tags(book, "Genre")):
+        return "literary fiction"
     return None
+
+
+def shelf(book):
+    """Which kind of romance this is, from what readers tagged it."""
+    genres = set(tags(book, "Genre"))
+    moods = [m.lower() for m in tags(book, "Mood", top=3)]
+    if "Dark Romance" in genres:
+        return "dark"
+    if SUSPENSE & genres:
+        return "suspense"
+    if "dark" in moods:
+        return "dark"
+    if {"funny", "lighthearted"} & set(moods):
+        return "romcom"
+    return "heartfelt"
 
 
 def clean(book):
@@ -100,6 +151,7 @@ def clean(book):
         "readers": book["users_count"],
         "description": (book["description"] or "").strip(),
         "cover": (book.get("image") or {}).get("url"),
+        "shelf": shelf(book),
         "genres": tags(book, "Genre"),
         "moods": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Mood", [])},
         "reader_tags": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Tag", [])},
@@ -109,15 +161,14 @@ def clean(book):
 
 def pull():
     books = {}
-    for mood in ("funny", "lighthearted"):
-        offset = 0
-        while True:
-            page = hardcover.query(PULL, {"mood": mood, "offset": offset})["books"]
-            for book in page:
-                books[book["id"]] = book
-            if len(page) < 250:
-                break
-            offset += 250
+    offset = 0
+    while True:
+        page = hardcover.query(PULL, {"offset": offset})["books"]
+        for book in page:
+            books[book["id"]] = book
+        if len(page) < 250:
+            break
+        offset += 250
     for title in FAVORITES:
         for book in hardcover.query(BY_TITLE, {"title": title})["books"]:
             books[book["id"]] = book
