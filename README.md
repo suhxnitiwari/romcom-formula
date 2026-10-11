@@ -16,7 +16,7 @@ It starts from four books I love: *The Unhoneymooners*, *The Love Hypothesis*, *
 
 ## How it's built
 
-1. **Catalog** (`formula/catalog.py`): pulls every romance on [Hardcover](https://hardcover.app) from 2010 on with 50+ ratings (1,536 books) and keeps the contemporary ones. Readers tag loosely, so the rules compare vote counts: a book stays if Romance is what readers mostly call it, and a stray Fantasy or Young Adult vote can't drop it. The few that slip through are removed by hand, each with its reason in the code. 410 books remain, each on a shelf: rom-com (263), heartfelt (59), romantic suspense (25) or dark romance (63).
+1. **Catalog** (`formula/catalog.py`): pulls every romance on [Hardcover](https://hardcover.app) from 2010 on with 50+ ratings (1,536 books) and keeps contemporary M/F romance worth recommending. Readers tag loosely, so the rules compare vote counts: a book stays if Romance is what readers mostly call it, and a stray Fantasy or Young Adult vote can't drop it. Then a quality bar: 300+ readers, rated 3.6 or higher, and no erotica. The few that slip through are removed by hand, each with its reason in the code. 119 books remain, each on a shelf: rom-com (84), heartfelt (15), romantic suspense (9) or dark romance (11).
 2. **Codebook** (`formula/tropes.py`): sixteen tropes, each with a one-line definition an annotator can apply the same way every time.
 3. **Ground truth** (`formula/label.py`, `web/label.html`): a local page where I tag the tropes in books I've read. Those labels (`data/labels.json`) are what the detector is graded against.
 

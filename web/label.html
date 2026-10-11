@@ -44,8 +44,15 @@
   .cover { position: relative; aspect-ratio: 2/3; border-radius: 6px; overflow: hidden; background: var(--line);
          box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 18px rgba(43,32,36,.08); transition: transform .2s; }
   .book:hover .cover { transform: translateY(-3px); }
-  .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .badge { position: absolute; left: 8px; bottom: 8px; background: var(--card); color: var(--ink); font-size: 11px;
+  .cover { display: flex; flex-direction: column; justify-content: space-between; padding: 16px 14px; }
+  .cover .ct { font: 600 19px/1.15 Fraunces, Georgia, serif; }
+  .cover .ca { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .75; }
+  .shelf-romcom { background: #ead9cc; color: #4a2c2f; }
+  .shelf-heartfelt { background: #dfe1d2; color: #33402f; }
+  .shelf-suspense { background: #cfd4dc; color: #26303d; }
+  .shelf-dark { background: #3a2a30; color: #efe3dc; }
+  .sheet .left .cover { aspect-ratio: 2/3; border-radius: 6px; }
+  .badge { position: absolute; right: 8px; bottom: 8px; background: var(--card); color: var(--ink); font-size: 11px;
          font-weight: 600; padding: 3px 8px; border-radius: 999px; }
   .badge.done { background: var(--done); color: #fff; }
   .star { position: absolute; right: 8px; top: 8px; background: var(--accent); color: #fff; font-size: 11px;
@@ -111,7 +118,7 @@
 
 <dialog id="dlg">
   <div class="sheet">
-    <div class="left"><img id="dCover" alt=""><div class="blurb" id="dBlurb"></div></div>
+    <div class="left"><div class="cover" id="dCover"></div><div class="blurb" id="dBlurb"></div></div>
     <div>
       <h2 id="dTitle"></h2>
       <div class="by" id="dBy"></div>
@@ -132,6 +139,7 @@
 </dialog>
 
 <script>
+const SHELF = { romcom: "Rom-com", heartfelt: "Heartfelt", suspense: "Romantic suspense", dark: "Dark romance" };
 let books = [], tropes = [], labels = {}, filter = "all", shown = [], current = null, saveTimer;
 const $ = id => document.getElementById(id);
 const isDone = l => l && (l.tropes.length || l.none || l.not_romcom);
@@ -170,7 +178,7 @@ function render() {
     const l = labels[b.id], n = l ? l.tropes.length : 0;
     const badge = isDone(l) ? `<span class="badge done">${l.not_romcom ? "not a rom-com" : n ? n + (n > 1 ? " tropes" : " trope") : "no tropes"}</span>` : "";
     return `<button class="book" data-id="${b.id}">
-      <div class="cover"><img loading="lazy" src="${b.cover}" alt="">${b.favorite ? '<span class="star">✦ yours</span>' : ""}${badge}</div>
+      <div class="cover shelf-${b.shelf}"><span class="ca">${esc(SHELF[b.shelf])}</span><span class="ct">${esc(b.title)}</span>${b.favorite ? '<span class="star">✦ yours</span>' : ""}${badge}</div>
       <div class="t">${esc(b.title)}</div><div class="a">${esc(b.author)} · ${b.year}</div></button>`;
   }).join("") : `<div class="empty">Nothing here yet.</div>`;
 }
@@ -183,7 +191,8 @@ function tidy(id) { if (labels[id] && !isDone(labels[id]) && !labels[id].note) d
 function open(id) {
   current = id;
   const b = books.find(x => x.id == id), l = labels[id] || { tropes: [], none: false, not_romcom: false, note: "" };
-  $("dCover").src = b.cover; $("dTitle").textContent = b.title; $("dBy").textContent = `${b.author} · ${b.year}`;
+  $("dCover").className = "cover shelf-" + b.shelf;
+  $("dCover").innerHTML = `<span class="ca">${esc(SHELF[b.shelf])}</span><span class="ct">${esc(b.title)}</span>`; $("dTitle").textContent = b.title; $("dBy").textContent = `${b.author} · ${b.year}`;
   $("dBlurb").textContent = b.description || "";
   $("dTropes").innerHTML = tropes.map(t =>
     `<button class="trope" data-k="${t.key}" aria-pressed="${l.tropes.includes(t.key)}"><b>${t.name}</b><span>${t.means}</span></button>`).join("");

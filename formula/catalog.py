@@ -43,6 +43,12 @@ ROMANCE = {"Romance", "Dark Romance", "Contemporary Romance"}
 # Shelf labels that say nothing about what kind of book it is.
 GENERIC = {"Fiction", "General", "Contemporary", "Literature & Fiction", "Adult", "Novel",
            "to-read", "physical-tbr", "did-not-finish", "Audiobook", "Spanish", "English"}
+# Quality: widely read, well rated, and not erotica. Small self-published filler and
+# books sold on explicit covers don't make it in.
+MIN_READERS = 300
+MIN_RATING = 3.6
+EROTICA = {"erotica", "Erotica", "Erotic Romance", "Erotic romance", "Erotic fiction", "Erotic literature"}
+
 # Literary fiction with a love story inside it.
 LITERARY = {"Literary Fiction", "Literary", "Literature"}
 
@@ -55,6 +61,19 @@ SHELVES = {
     "dark": "Dark romance",
 }
 
+
+# Scope: the catalog covers M/F romance. Keyed by Hardcover id, because titles
+# repeat (there are two books called The Long Game).
+NOT_MF = {
+    381772: "Red, White & Royal Blue",
+    524964: "Heated Rivalry",
+    524963: "Game Changer",
+    552426: "The Long Game (Rachel Reid)",
+    455105: "The Charm Offensive",
+    790314: "Role Model",
+    817516: "Pucking Around",
+    817464: "God of Fury",
+}
 
 # Tags can't catch everything. These passed every rule and still aren't romance novels;
 # each one is a judgment call, so each one says why.
@@ -105,6 +124,8 @@ def votes(book, names):
 
 def why_not(book):
     """Return why a book isn't a contemporary romance, or None if it is."""
+    if book["id"] in NOT_MF:
+        return "outside scope: not M/F"
     if book["title"] in NOT_ROMANCE:
         return "hand-checked: " + NOT_ROMANCE[book["title"]]
     romance = votes(book, ROMANCE)
@@ -119,6 +140,12 @@ def why_not(book):
         return "nonfiction"
     if LITERARY & set(tags(book, "Genre")):
         return "literary fiction"
+    if votes(book, EROTICA):
+        return "erotica"
+    if book["users_count"] < MIN_READERS:
+        return "not widely read"
+    if (book["rating"] or 0) < MIN_RATING:
+        return "rated below 3.6"
     return None
 
 
@@ -154,6 +181,7 @@ def clean(book):
         "shelf": shelf(book),
         "genres": tags(book, "Genre"),
         "moods": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Mood", [])},
+        "content_warnings": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Content Warning", [])},
         "reader_tags": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Tag", [])},
         "favorite": book["title"] in FAVORITES,
     }

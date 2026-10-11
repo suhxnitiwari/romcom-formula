@@ -17,7 +17,7 @@ PAGE = ROOT / "web" / "label.html"
 
 
 def sheet_books():
-    keep = ("id", "title", "author", "year", "cover", "description", "favorite", "readers", "shelf")
+    keep = ("id", "title", "author", "year", "description", "favorite", "readers", "shelf")
     return [{k: b[k] for k in keep} for b in json.loads(BOOKS.read_text())]
 
 
