@@ -6,6 +6,7 @@ Each book then goes on one shelf (rom-com, heartfelt, romantic suspense or dark
 romance), so the project can ask what separates a rom-com from a dark romance.
 """
 import json
+import re
 
 from . import hardcover
 
@@ -14,7 +15,7 @@ FIELDS = """id slug title release_year pages rating ratings_count users_count
 
 PULL = """query($offset: Int!) {
   books(where: {cached_tags: {_contains: {Genre: [{tag: "Romance"}]}},
-                release_year: {_gte: 2010}, ratings_count: {_gte: 50}},
+                release_year: {_gte: 2000}, users_count: {_gte: 50}},
         order_by: {users_count: desc}, limit: 250, offset: $offset) { %s }
 }""" % FIELDS
 
@@ -45,9 +46,22 @@ GENERIC = {"Fiction", "General", "Contemporary", "Literature & Fiction", "Adult"
            "to-read", "physical-tbr", "did-not-finish", "Audiobook", "Spanish", "English"}
 # Quality: widely read, well rated, and not erotica. Small self-published filler and
 # books sold on explicit covers don't make it in.
-MIN_READERS = 300
+MIN_READERS = 100
 MIN_RATING = 3.6
-EROTICA = {"erotica", "Erotica", "Erotic Romance", "Erotic romance", "Erotic fiction", "Erotic literature"}
+EROTICA = {"erotica", "Erotica", "Erotic Romance", "Erotic romance", "Erotic fiction", "Erotic literature",
+           "Erotic stories", "Erotic", "Spicy", "smut", "Smutty", "bdsm", "Dark Romance/Kink",
+           "Fiction / Romance / Erotic"}
+# Spice. Readers rarely tag it, and one "sexy" vote on Get a Life, Chloe Brown looks
+# the same as one on a dark romance, so there are two levels:
+#   hard: unmistakable (kink, BDSM, spice 4-5, "explicit content" in the blurb). Cut.
+#   soft: a "steamy" or "spicy" vote, or "steamy" in the blurb. Kept, but flagged for
+#         Suhani to approve or reject by author.
+HARD_SPICE = re.compile(
+    r"^(erotica|erotic.*|smut|smutty|bdsm|kink.*|spice[- ]?[45]|spice level [45]|spice [45]/5|"
+    r"very explicit|explicit sexual content|sexual content/explicit scenes)$", re.I)
+SOFT_SPICE = re.compile(r"^(steamy|sexy|spicy|dirty|high heat|taboo|open-door spice|spice[- ]?3|spice 3/5)$", re.I)
+HARD_BLURB = re.compile(r"explicit (content|scenes|sex)|mature (readers|audiences|content)|\b18\+|erotic", re.I)
+SOFT_BLURB = re.compile(r"steamy|scorching|filthy|dirty (talk|office|little)|kinky|\btaboo\b", re.I)
 
 # Literary fiction with a love story inside it.
 LITERARY = {"Literary Fiction", "Literary", "Literature"}
@@ -140,12 +154,26 @@ def why_not(book):
         return "nonfiction"
     if LITERARY & set(tags(book, "Genre")):
         return "literary fiction"
-    if votes(book, EROTICA):
+    if votes(book, EROTICA) * 3 >= romance:
         return "erotica"
+    if spice(book) == "hard":
+        return "explicit"
     if book["users_count"] < MIN_READERS:
         return "not widely read"
     if (book["rating"] or 0) < MIN_RATING:
         return "rated below 3.6"
+    return None
+
+
+def spice(book):
+    """'hard', 'soft' or None, from readers' tags, warnings and moods, and the blurb."""
+    cached = book.get("cached_tags") or {}
+    found = [t["tag"].strip('"') for kind in ("Tag", "Content Warning", "Mood") for t in cached.get(kind, [])]
+    blurb = book.get("description") or ""
+    if any(HARD_SPICE.match(t) for t in found) or HARD_BLURB.search(blurb):
+        return "hard"
+    if any(SOFT_SPICE.match(t) for t in found) or SOFT_BLURB.search(blurb):
+        return "soft"
     return None
 
 
@@ -179,6 +207,7 @@ def clean(book):
         "description": (book["description"] or "").strip(),
         "cover": (book.get("image") or {}).get("url"),
         "shelf": shelf(book),
+        "spice_flag": spice(book) == "soft",
         "genres": tags(book, "Genre"),
         "moods": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Mood", [])},
         "content_warnings": {t["tag"].lower(): t["count"] for t in book["cached_tags"].get("Content Warning", [])},

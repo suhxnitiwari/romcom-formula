@@ -40,9 +40,20 @@ def test_other_worlds_and_young_adult_are_out_when_readers_agree():
 
 
 def test_quality_bar():
-    assert why_not(book(readers=104)) == "not widely read"
+    assert why_not(book(readers=60)) == "not widely read"
     assert why_not(book(rating=2.68)) == "rated below 3.6"
-    assert why_not(book(genres=(("Romance", 6), ("erotica", 1)))) == "erotica"
+    assert why_not(book(genres=(("Romance", 6), ("erotica", 2)))) == "erotica"
+    # One stray vote (The Hating Game has one) is not enough.
+    assert why_not(book(genres=(("Romance", 6), ("erotica", 1)))) is None
+
+
+def test_spice_is_cut_or_flagged():
+    from formula.catalog import spice
+    hard = book(); hard["cached_tags"]["Tag"] = [{"tag": "spice-5", "count": 1}]
+    assert why_not(hard) == "explicit"
+    soft = book(); soft["cached_tags"]["Mood"].append({"tag": "steamy", "count": 1})
+    assert why_not(soft) is None and spice(soft) == "soft"
+    assert spice({"cached_tags": {}, "description": "Contains explicit content."}) == "hard"
 
 
 def test_scope_is_mf_romance():

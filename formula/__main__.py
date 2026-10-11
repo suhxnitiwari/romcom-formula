@@ -7,7 +7,7 @@ def main(argv):
     command = argv[0] if argv else "catalog"
     if command == "catalog":
         pulled, kept, dropped = catalog.build()
-        print(f"Pulled {len(pulled)} romances from Hardcover (2010 on, 50+ ratings).")
+        print(f"Pulled {len(pulled)} romances from Hardcover (2000 on, 50+ readers).")
         for reason, n in sorted(dropped.items(), key=lambda x: -x[1]):
             print(f"  - {n:4} dropped: {reason}")
         print(f"Kept {len(kept)} contemporary romances -> data/books.json")
