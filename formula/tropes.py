@@ -15,6 +15,8 @@ TROPES = {
         "They work together, or compete for the same job, client or promotion."),
     "second_chance": ("Second chance",
         "They had something before, lost it, and get another try."),
+    "wrong_time": ("Right person, wrong time",
+        "They fit, but life keeps getting in the way (other partners, distance, ambition) for years."),
     "forced_proximity": ("Forced proximity",
         "Circumstances keep them in close quarters: a shared house, a trip, snowed in, one bed."),
     "grumpy_sunshine": ("Grumpy × sunshine",
