@@ -17,7 +17,7 @@ It starts from four books I love: *The Unhoneymooners*, *The Love Hypothesis*, *
 ## How it's built
 
 1. **Catalog** (`formula/catalog.py`): pulls every romance on [Hardcover](https://hardcover.app) that readers called funny or lighthearted (1,049 books), then keeps only contemporary rom-coms. Fantasy, historical, young adult, dark romance and literary fiction are dropped by rule; the few that slip through are removed by hand, each with its reason in the code. 269 books remain.
-2. **Codebook** (`formula/tropes.py`): twelve tropes, each with a one-line definition an annotator can apply the same way every time.
+2. **Codebook** (`formula/tropes.py`): fifteen tropes, each with a one-line definition an annotator can apply the same way every time.
 3. **Ground truth** (`formula/label.py`, `web/label.html`): a local page where I tag the tropes in books I've read. Those labels (`data/labels.json`) are what the detector is graded against.
 
 ```bash

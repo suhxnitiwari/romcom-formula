@@ -1,4 +1,4 @@
-"""The trope codebook: the twelve tropes, in the words an annotator would use.
+"""The trope codebook: the tropes, in the words an annotator would use.
 
 Definitions are my own, written from Suhani's list and Kindlepreneur's
 "Book Tropes by Genre" guide (kindlepreneur.com/book-tropes).
@@ -29,4 +29,10 @@ TROPES = {
         "The romance takes most of the book to arrive."),
     "love_triangle": ("Love triangle",
         "One of them is caught between two possible partners."),
+    "morally_gray": ("Morally gray",
+        "A lead does questionable or outright wrong things, and the book asks you to love them anyway."),
+    "unreliable_narrator": ("Unreliable narrator",
+        "Whoever tells the story is hiding, misreading or bending what really happened."),
+    "house_of_secrets": ("House of secrets",
+        "A house, family or small town is hiding something from the past, and it comes out."),
 }
