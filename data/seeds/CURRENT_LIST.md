@@ -1,6 +1,6 @@
 # Current list (by genre)
 
-Total: 155 titles. Goal: 1,000 books that each have 1,000+ readers.
+Total: 171 titles. Goal: 1,000 books that each have 1,000+ readers.
 
 ## Fake dating: 120 titles
 
@@ -165,4 +165,23 @@ Total: 155 titles. Goal: 1,000 books that each have 1,000+ readers.
 - What Happens in Amsterdam (Rachel Lynn Solomon)
 - Wild Side (Elsie Silver)
 - With You Forever (Chloe Liese)
+
+## Enemies to lovers: 16 titles
+
+- Beach Read (Emily Henry)
+- Book Lovers (Emily Henry)
+- Bossman (Vi Keeland)
+- Dating You / Hating You (Christina Lauren)
+- Enemies to Lovers (Laura Jane Williams)
+- From Lukov with Love (Mariana Zapata)
+- Not in My Book (Katie Holt)
+- Ramón and Julieta (Alana Quintana Albertson)
+- Set on You (Amy Lea)
+- The Devil You Know (Elizabeth O'Roark)
+- The Graham Effect (Elle Kennedy)
+- The Hating Game (Sally Thorne)
+- The Make-Up Test (Jenny L. Howe)
+- The Rivals (Vi Keeland)
+- The Wedding Party (Jasmine Guillory)
+- The Worst Best Man (Mia Sosa)
 
