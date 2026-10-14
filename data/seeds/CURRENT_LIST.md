@@ -1,8 +1,8 @@
 # Current list (by genre)
 
-Total: 135 titles. Goal: 1,000 books that each have 1,000+ readers.
+Total: 130 titles. Goal: 1,000 books that each have 1,000+ readers.
 
-## Fake dating: 125 titles
+## Fake dating: 120 titles
 
 - A Follow-Through in Faking (Bridget L. Rose)
 - A Proposal They Can't Refuse (Natalie Caña)
@@ -16,7 +16,6 @@ Total: 135 titles. Goal: 1,000 books that each have 1,000+ readers.
 - Bleacher Report (Kenna King)
 - Blind Side (Kandi Steiner)
 - Bridesmaid for Hire (Meghan Quinn)
-- Bridgerton: The Duke and I (Julia Quinn)
 - Bright Lights & Summer Nights (Kat Singleton)
 - Broken Pact (Penelope Black)
 - Chasing After You (Laurea Matthews)
@@ -47,7 +46,6 @@ Total: 135 titles. Goal: 1,000 books that each have 1,000+ readers.
 - How My Neighbor Stole Christmas (Meghan Quinn)
 - How to Fake It in Hollywood (Ava Wilder)
 - I'll Pretend You're Mine (Tashie Bhuiyan)
-- Iris Kelly Doesn't Date (Ashley Herring Blake)
 - Irresistibly Wild (J. Saman)
 - It's Always Been You (Samantha Brinn)
 - Jasper Valley (Devney Perry)
@@ -55,7 +53,6 @@ Total: 135 titles. Goal: 1,000 books that each have 1,000+ readers.
 - Lassoed Love (Ann Einerson)
 - Lights Out (Jenni Fletcher)
 - Love Arranged (Lauren Asher)
-- Love, Hate & Clickbait (Liz Bowery)
 - Lovelight Farms (B.K. Borison)
 - Luck of the Draw (author unknown)
 - Make the Play (Hailey Rodger)
@@ -108,7 +105,6 @@ Total: 135 titles. Goal: 1,000 books that each have 1,000+ readers.
 - The Plus One (Mazey Eddings)
 - The Right Move (Liz Tomforde)
 - The Rule Book (author unknown)
-- The Secret Service of Tea and Treason (India Holton)
 - The Spanish Love Deception (Elena Armas)
 - The Unhoneymooners (Christina Lauren)
 - The Wall of Winnipeg and Me (Mariana Zapata)
@@ -125,7 +121,6 @@ Total: 135 titles. Goal: 1,000 books that each have 1,000+ readers.
 - Wicked & Wildflower (Sarah A. Bailey)
 - Wicked Lies (E.M. Rose)
 - Wish You Would (Ivy Miller)
-- Written in the Stars (Alexandria Bellefleur)
 - Wyatt (Jessica Peterson)
 - You Give Me That Feeling (Julie Kriss)
 - Yours Truly (Abby Jimenez)
