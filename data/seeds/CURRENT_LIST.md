@@ -1,8 +1,8 @@
 # Current list (by genre)
 
-Total: 136 titles. Goal: 1,000 books that each have 1,000+ readers.
+Total: 135 titles. Goal: 1,000 books that each have 1,000+ readers.
 
-## Fake dating: 126 titles
+## Fake dating: 125 titles
 
 - A Follow-Through in Faking (Bridget L. Rose)
 - A Proposal They Can't Refuse (Natalie Caña)
@@ -15,7 +15,6 @@ Total: 136 titles. Goal: 1,000 books that each have 1,000+ readers.
 - Black Ties & White Lies (Kat Singleton)
 - Bleacher Report (Kenna King)
 - Blind Side (Kandi Steiner)
-- Boyfriend Material (Alexis Hall)
 - Bridesmaid for Hire (Meghan Quinn)
 - Bridgerton: The Duke and I (Julia Quinn)
 - Bright Lights & Summer Nights (Kat Singleton)
