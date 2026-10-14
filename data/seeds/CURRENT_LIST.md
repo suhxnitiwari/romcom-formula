@@ -1,6 +1,6 @@
 # Current list (by genre)
 
-Total: 146 titles. Goal: 1,000 books that each have 1,000+ readers.
+Total: 155 titles. Goal: 1,000 books that each have 1,000+ readers.
 
 ## Fake dating: 120 titles
 
@@ -144,16 +144,25 @@ Total: 146 titles. Goal: 1,000 books that each have 1,000+ readers.
 - Two Can Play (Ali Hazelwood)
 - Under One Roof (Ali Hazelwood)
 
-## Marriage of convenience: 10 titles
+## Marriage of convenience: 19 titles
 
+- Gloves Off (Stephanie Archer)
 - In a Jam (Kate Canterbary)
 - Marriage for One (Ella Maise)
+- Play Along (Liz Tomforde)
+- Roomies (Christina Lauren)
 - Snowed In (Catherine Walsh)
 - The Amendment (Melanie Moreland)
 - The Billionaire's Fake Fiancée (Annika Martin)
 - The Contract (Melanie Moreland)
 - The Favor (Suzanne Wright)
 - The Fiancé Dilemma (Elena Armas)
+- The Marriage Bargain (Jennifer Probst)
+- The Marriage Effect (Karla Sorensen)
 - The Paradise Problem (Christina Lauren)
 - The Prenup (Lauren Layne)
+- To Have and to Hate (R.S. Grey)
+- What Happens in Amsterdam (Rachel Lynn Solomon)
+- Wild Side (Elsie Silver)
+- With You Forever (Chloe Liese)
 
