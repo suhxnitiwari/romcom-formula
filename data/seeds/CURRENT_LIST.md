@@ -1,6 +1,6 @@
 # Current list (by genre)
 
-Total: 136 titles. Goal: 1,000 books that each have 1,000+ readers.
+Total: 146 titles. Goal: 1,000 books that each have 1,000+ readers.
 
 ## Fake dating: 120 titles
 
@@ -143,4 +143,17 @@ Total: 136 titles. Goal: 1,000 books that each have 1,000+ readers.
 - The Soulmate Equation (Christina Lauren)
 - Two Can Play (Ali Hazelwood)
 - Under One Roof (Ali Hazelwood)
+
+## Marriage of convenience: 10 titles
+
+- In a Jam (Kate Canterbary)
+- Marriage for One (Ella Maise)
+- Snowed In (Catherine Walsh)
+- The Amendment (Melanie Moreland)
+- The Billionaire's Fake Fiancée (Annika Martin)
+- The Contract (Melanie Moreland)
+- The Favor (Suzanne Wright)
+- The Fiancé Dilemma (Elena Armas)
+- The Paradise Problem (Christina Lauren)
+- The Prenup (Lauren Layne)
 
