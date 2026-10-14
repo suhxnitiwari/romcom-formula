@@ -1,6 +1,6 @@
 # Current list (by genre)
 
-Total: 130 titles. Goal: 1,000 books that each have 1,000+ readers.
+Total: 136 titles. Goal: 1,000 books that each have 1,000+ readers.
 
 ## Fake dating: 120 titles
 
@@ -125,16 +125,22 @@ Total: 130 titles. Goal: 1,000 books that each have 1,000+ readers.
 - You Give Me That Feeling (Julie Kriss)
 - Yours Truly (Abby Jimenez)
 
-## Women in STEM: 10 titles
+## Women in STEM: 16 titles
 
+- A Brush with Love (Mazey Eddings)
+- Below Zero (Ali Hazelwood)
 - Lady's Formula for Love (author unknown)
 - Love and Other Brain Experiments (Hannah Brohm)
 - Love by Design (author unknown)
 - Love on the Brain (Ali Hazelwood)
 - Love, Theoretically (Ali Hazelwood)
 - Not in Love (Ali Hazelwood)
+- Stuck with You (Ali Hazelwood)
+- The Boyfriend Project (Farrah Rochon)
 - The Fake Mate (Lana Ferguson)
 - The Love Hypothesis (Ali Hazelwood)
 - The Perfect Equation (author unknown)
 - The Soulmate Equation (Christina Lauren)
+- Two Can Play (Ali Hazelwood)
+- Under One Roof (Ali Hazelwood)
 
